@@ -11,5 +11,5 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("postgresql://express_api_design_f81g_user:E71MYqW66NfPZee6K5jYps2p5gBhSD8p@dpg-d1rot02dbo4c738e2ang-a.oregon-postgres.render.com/express_api_design_f81g")
+  url      = env("DATABASE_URL")
 }
