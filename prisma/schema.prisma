@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  // output   = "../app/generated/prisma"
 }
 
 datasource db {
@@ -66,7 +66,7 @@ model Issue {
   description String      @db.VarChar(255)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  status      IssueStatus @default(IN_PROGRESS)
+  status      IssueStatus @default(OPEN)
 }
 
 enum IssueStatus {
