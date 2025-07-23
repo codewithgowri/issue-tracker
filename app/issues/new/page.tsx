@@ -10,6 +10,7 @@ import { issueSchema } from "../../validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 // Dynamically import SimpleMDE editor with SSR disabled to avoid 'navigator is not defined' error
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
@@ -33,6 +34,7 @@ const NewIssuePage = () => {
   });
   const router = useRouter();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   return (
     <div className="max-w-xl ">
       {error && (
@@ -48,9 +50,11 @@ const NewIssuePage = () => {
         className=" space-y-4"
         onSubmit={handleSubmit(async ({ title, description }) => {
           try {
+            setLoading(true);
             await axios.post("/api/issues", { title, description });
             router.push("/issues");
           } catch (error) {
+            setLoading(false);
             setError("Failed to create issue");
           }
         })}
@@ -65,7 +69,9 @@ const NewIssuePage = () => {
           render={({ field }) => <SimpleMDE {...field} />}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button type="submit">Submit New Issue</Button>
+        <Button disabled={loading} type="submit">
+          Submit New Issue {loading && <Spinner />}
+        </Button>
       </form>
     </div>
   );
