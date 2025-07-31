@@ -4,10 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const body = await request.json();
   const validation = issueSchema.safeParse(body);
+
   if (!validation.success) {
     return NextResponse.json(
       {
@@ -16,12 +18,14 @@ export async function PATCH(
       { status: 400 }
     );
   }
+
   const issue = await prisma.issue.update({
-    where: { id: Number(params.id) },
+    where: { id: Number(id) },
     data: {
       title: validation.data.title,
       description: validation.data.description,
     },
   });
+
   return NextResponse.json(issue, { status: 200 });
 }

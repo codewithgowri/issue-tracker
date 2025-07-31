@@ -56,6 +56,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             if (issue) await axios.patch(`/api/issues/${issue.id}`, body);
             else await axios.post("/api/issues", body);
             router.push("/issues");
+            router.refresh();
           } catch (error) {
             setLoading(false);
             setError("Failed to create issue");

@@ -7,7 +7,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import Markdown from "react-markdown";
 
 interface Props {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }
 const IssueDetails = async ({ params }: Props) => {
   const resolvedParams = await params;

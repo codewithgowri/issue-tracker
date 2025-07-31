@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
 interface Props {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }
 
 const IssueEditPage = async ({ params }: Props) => {
