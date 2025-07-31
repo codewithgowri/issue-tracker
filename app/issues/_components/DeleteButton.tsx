@@ -1,4 +1,5 @@
 "use client";
+import { Spinner } from "@/app/components";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -7,23 +8,27 @@ import { RiDeleteBinLine } from "react-icons/ri";
 
 const DeleteButton = ({ issueId }: { issueId: number }) => {
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const handleDelete = async () => {
     try {
+      setLoading(true);
       await axios.delete(`/api/issues/${issueId}`);
       router.push("/issues");
       router.refresh();
     } catch (error) {
       setError(true);
+      setLoading(false);
     }
   };
   return (
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button>
+          <Button disabled={loading} color="red" variant="solid">
             <RiDeleteBinLine />
-            Delete
+            Delete {loading && <Spinner />}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
