@@ -8,56 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id          String   @id
-  name        String   @db.VarChar(255)
-  createdAt   DateTime @default(now())
-  belongsToId String
-  User        User     @relation(fields: [belongsToId], references: [id])
-  Update      Update[]
-
-  @@unique([id, belongsToId])
-}
-
-model Update {
-  id           String         @id
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime
-  title        String         @db.VarChar(255)
-  body         String
-  status       UPDATE_STATUS  @default(IN_PROGRESS)
-  version      String?
-  asset        String
-  productId    String
-  Product      Product        @relation(fields: [productId], references: [id])
-  UpdatePoints UpdatePoints[]
-}
-
-model UpdatePoints {
-  id          String   @id
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  name        String   @db.VarChar(255)
-  description String
-  updateId    String
-  Update      Update   @relation(fields: [updateId], references: [id])
-}
-
-model User {
-  id        String    @id
-  username  String    @unique
-  password  String
-  createdAt DateTime  @default(now())
-  Product   Product[]
-}
-
-enum UPDATE_STATUS {
-  IN_PROGRESS
-  LIVE
-  DEPRECATED
-  ARCHIVED
-}
-
 // This is a Prisma schema file that defines the data model for an issue tracker application.
 
 model Issue {
@@ -73,4 +23,74 @@ enum IssueStatus {
   OPEN
   IN_PROGRESS
   CLOSED
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
