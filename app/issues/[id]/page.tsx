@@ -19,6 +19,7 @@ const IssueDetails = async ({ params }: Props) => {
   });
 
   if (!issue) notFound();
+
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap={"5"}>
       <Box className={"md:col-span-4"}>
@@ -37,7 +38,7 @@ const IssueDetails = async ({ params }: Props) => {
             <BsPencilSquare />
             <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
           </Button>
-          <DeleteButton />
+          <DeleteButton issueId={issue.id} />
         </Flex>
       </Box>
     </Grid>
