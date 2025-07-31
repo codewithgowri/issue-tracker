@@ -4,8 +4,8 @@ import { Box, Button, Card, Flex, Grid, Heading } from "@radix-ui/themes";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BsPencilSquare } from "react-icons/bs";
-import { RiDeleteBinLine } from "react-icons/ri";
 import Markdown from "react-markdown";
+import DeleteButton from "../_components/DeleteButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -37,10 +37,7 @@ const IssueDetails = async ({ params }: Props) => {
             <BsPencilSquare />
             <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
           </Button>
-          <Button>
-            <RiDeleteBinLine />
-            Delete
-          </Button>
+          <DeleteButton />
         </Flex>
       </Box>
     </Grid>
