@@ -4,6 +4,7 @@ import { Box, Button, Card, Flex, Grid, Heading } from "@radix-ui/themes";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BsPencilSquare } from "react-icons/bs";
+import { RiDeleteBinLine } from "react-icons/ri";
 import Markdown from "react-markdown";
 
 interface Props {
@@ -16,24 +17,31 @@ const IssueDetails = async ({ params }: Props) => {
       id: Number(resolvedParams.id),
     },
   });
+
   if (!issue) notFound();
   return (
-    <Grid columns={{ initial: "1", md: "2" }} gap={"4"}>
-      <Box>
+    <Grid columns={{ initial: "1", sm: "5" }} gap={"5"}>
+      <Box className={"md:col-span-4"}>
         <Heading as="h1">{issue.title}</Heading>
         <Flex gap={"2"} className="my-3">
           <IssueStatusBadge status={issue.status} />
           <p>{issue?.createdAt.toDateString()}</p>
         </Flex>
-        <Card className="prose">
+        <Card className="prose max-w-full">
           <Markdown>{issue.description}</Markdown>
         </Card>
       </Box>
       <Box>
-        <Button>
-          <BsPencilSquare />
-          <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
-        </Button>
+        <Flex gap={"4"} direction="column">
+          <Button>
+            <BsPencilSquare />
+            <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
+          </Button>
+          <Button>
+            <RiDeleteBinLine />
+            Delete
+          </Button>
+        </Flex>
       </Box>
     </Grid>
   );
