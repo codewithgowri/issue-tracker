@@ -1,0 +1,27 @@
+import { issueSchema } from "@/app/validationSchemas";
+import prisma from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const body = await request.json();
+  const validation = issueSchema.safeParse(body);
+  if (!validation.success) {
+    return NextResponse.json(
+      {
+        errors: validation.error.issues,
+      },
+      { status: 400 }
+    );
+  }
+  const issue = await prisma.issue.update({
+    where: { id: Number(params.id) },
+    data: {
+      title: validation.data.title,
+      description: validation.data.description,
+    },
+  });
+  return NextResponse.json(issue, { status: 200 });
+}

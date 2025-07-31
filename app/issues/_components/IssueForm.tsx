@@ -2,6 +2,7 @@
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Issue } from "@prisma/client";
 import { Button, Callout, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
@@ -11,7 +12,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { issueSchema } from "../../validationSchemas";
-import { Issue } from "@prisma/client";
 
 // Dynamically import SimpleMDE editor with SSR disabled to avoid 'navigator is not defined' error
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
@@ -29,13 +29,14 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   } = useForm<IssueFormData>({
     resolver: zodResolver(issueSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: issue?.title || "",
+      description: issue?.description || "",
     },
   });
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   return (
     <div className="max-w-xl ">
       {error && (
@@ -49,10 +50,11 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       )}
       <form
         className=" space-y-4"
-        onSubmit={handleSubmit(async ({ title, description }) => {
+        onSubmit={handleSubmit(async (body) => {
           try {
             setLoading(true);
-            await axios.post("/api/issues", { title, description });
+            if (issue) await axios.patch(`/api/issues/${issue.id}`, body);
+            else await axios.post("/api/issues", body);
             router.push("/issues");
           } catch (error) {
             setLoading(false);
@@ -60,19 +62,18 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           }
         })}
       >
-        <TextField.Root defaultValue={issue?.title} {...register("title")}>
+        <TextField.Root {...register("title")}>
           <TextField.Slot>Title</TextField.Slot>
         </TextField.Root>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name="description"
           control={control}
-          defaultValue={issue?.description}
           render={({ field }) => <SimpleMDE {...field} />}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button disabled={loading} type="submit">
-          Submit New Issue {loading && <Spinner />}
+          {issue ? "Update Issue" : "Submit New Issue"} {loading && <Spinner />}
         </Button>
       </form>
     </div>
