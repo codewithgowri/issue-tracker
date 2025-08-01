@@ -19,7 +19,15 @@ const IssueActions = () => {
       <Select.Root
         defaultValue={searchParams.get("status") || "all"}
         onValueChange={(status) => {
-          const query = status == "all" ? "" : `?status=${status}`;
+          const params = new URLSearchParams();
+          if (status !== "all") {
+            params.append("status", status);
+          }
+          if (searchParams.get("orderBy")) {
+            params.append("orderBy", searchParams.get("orderBy")!);
+          }
+          const query = `?${params.toString()}`;
+
           router.push(`/issues${query}`);
         }}
       >

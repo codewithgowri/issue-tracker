@@ -1,4 +1,4 @@
-import { issueSchema, patchIssueSchema } from "@/app/validationSchemas";
+import { patchIssueSchema } from "@/app/validationSchemas";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,7 +21,6 @@ export async function PATCH(
 
   //check if the assigneeId field is valid user or not
   if (validation.data.assigneeId) {
-    console.log("Assignee ID provided:", validation.data.assigneeId);
     const user = await prisma.user.findUnique({
       where: { id: validation.data.assigneeId },
     });
