@@ -2,10 +2,10 @@
 import { IssueStatus } from "@prisma/client";
 import { Button, Flex, Select } from "@radix-ui/themes";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
-const statuses: { label: string; value?: IssueStatus | "all" }[] = [
+const statuses: { label: string; value: IssueStatus | "all" }[] = [
   { label: "All", value: "all" },
   { label: "Open", value: IssueStatus.OPEN },
   { label: "Closed", value: IssueStatus.CLOSED },
@@ -13,9 +13,11 @@ const statuses: { label: string; value?: IssueStatus | "all" }[] = [
 ];
 const IssueActions = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   return (
     <Flex className="mb-5" justify="between">
       <Select.Root
+        defaultValue={searchParams.get("status") || "all"}
         onValueChange={(status) => {
           const query = status == "all" ? "" : `?status=${status}`;
           router.push(`/issues${query}`);
