@@ -1,4 +1,4 @@
-import { issueSchema } from "@/app/validationSchemas";
+import { issueSchema, patchIssueSchema } from "@/app/validationSchemas";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +8,7 @@ export async function PATCH(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const validation = issueSchema.safeParse(body);
+  const validation = patchIssueSchema.safeParse(body);
 
   if (!validation.success) {
     return NextResponse.json(
@@ -19,11 +19,25 @@ export async function PATCH(
     );
   }
 
+  //check if the assigneeId field is valid user or not
+  if (validation.data.assigneeId) {
+    console.log("Assignee ID provided:", validation.data.assigneeId);
+    const user = await prisma.user.findUnique({
+      where: { id: validation.data.assigneeId },
+    });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Assigned user does not exist" },
+        { status: 400 }
+      );
+    }
+  }
   const issue = await prisma.issue.update({
     where: { id: Number(id) },
     data: {
       title: validation.data.title,
       description: validation.data.description,
+      assigneeId: validation.data.assigneeId,
     },
   });
 

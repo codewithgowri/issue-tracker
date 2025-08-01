@@ -39,7 +39,7 @@ const IssueDetails = async ({ params }: Props) => {
       {session && (
         <Box>
           <Flex gap={"4"} direction="column">
-            <AssigneeSelect />
+            <AssigneeSelect issue={issue} />
             <Button>
               <BsPencilSquare />
               <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
