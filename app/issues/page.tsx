@@ -1,13 +1,28 @@
 import { IssueStatusBadge, Link } from "@/app/components";
 import prisma from "@/lib/prisma";
-import { Table } from "@radix-ui/themes";
+import { Box, Table } from "@radix-ui/themes";
 import IssueActions from "./IssueActions";
+import { IssueStatus } from "@prisma/client";
 
-const Issues = async () => {
-  const issues = await prisma.issue.findMany();
+const Issues = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ status: IssueStatus }>;
+}) => {
+  const resolvedSearchParams = await searchParams;
+  const statuses = Object.values(IssueStatus);
+  const status = statuses.includes(resolvedSearchParams.status)
+    ? resolvedSearchParams.status
+    : undefined;
+
+  const issues = await prisma.issue.findMany({
+    where: {
+      status: status,
+    },
+  });
   // await delay(3000); // Simulate loading delay
   return (
-    <div>
+    <Box>
       <IssueActions />
       <Table.Root variant="surface">
         <Table.Header>
@@ -40,7 +55,7 @@ const Issues = async () => {
           ))}
         </Table.Body>
       </Table.Root>
-    </div>
+    </Box>
   );
 };
 
