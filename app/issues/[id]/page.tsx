@@ -6,11 +6,15 @@ import { notFound } from "next/navigation";
 import { BsPencilSquare } from "react-icons/bs";
 import Markdown from "react-markdown";
 import DeleteButton from "../_components/DeleteButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import AssigneeSelect from "../_components/AssigneeSelect";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 const IssueDetails = async ({ params }: Props) => {
+  const session = await getServerSession(authOptions);
   const resolvedParams = await params;
   const issue = await prisma.issue.findUnique({
     where: {
@@ -32,15 +36,18 @@ const IssueDetails = async ({ params }: Props) => {
           <Markdown>{issue.description}</Markdown>
         </Card>
       </Box>
-      <Box>
-        <Flex gap={"4"} direction="column">
-          <Button>
-            <BsPencilSquare />
-            <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
-          </Button>
-          <DeleteButton issueId={issue.id} />
-        </Flex>
-      </Box>
+      {session && (
+        <Box>
+          <Flex gap={"4"} direction="column">
+            <AssigneeSelect />
+            <Button>
+              <BsPencilSquare />
+              <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
+            </Button>
+            <DeleteButton issueId={issue.id} />
+          </Flex>
+        </Box>
+      )}
     </Grid>
   );
 };
