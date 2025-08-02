@@ -5,6 +5,7 @@ import IssueActions from "./IssueActions";
 import { Issue, IssueStatus } from "@prisma/client";
 import NextLink from "next/link";
 import { FaSortAmountDownAlt } from "react-icons/fa";
+import Pagination from "@/app/components/Pagination";
 
 const columns: { label: string; value: keyof Issue; className?: string }[] = [
   { label: "Title", value: "title" },
@@ -19,14 +20,19 @@ const columns: { label: string; value: keyof Issue; className?: string }[] = [
 const Issues = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ status: IssueStatus; orderBy?: keyof Issue }>;
+  searchParams: Promise<{
+    status: IssueStatus;
+    orderBy: keyof Issue;
+    page: string;
+  }>;
 }) => {
   const resolvedSearchParams = await searchParams;
   const statuses = Object.values(IssueStatus);
   const status = statuses.includes(resolvedSearchParams.status)
     ? resolvedSearchParams.status
     : undefined;
-
+  const page = parseInt(resolvedSearchParams.page) || 1;
+  const pageSize = 3;
   const orderBy =
     resolvedSearchParams.orderBy &&
     columns.map((column) => column.value).includes(resolvedSearchParams.orderBy)
@@ -39,6 +45,13 @@ const Issues = async ({
       status: status,
     },
     orderBy: orderBy,
+    take: pageSize,
+    skip: (page - 1) * pageSize,
+  });
+  const itemCount = await prisma.issue.count({
+    where: {
+      status: status,
+    },
   });
   // await delay(3000); // Simulate loading delay
 
@@ -89,6 +102,11 @@ const Issues = async ({
           ))}
         </Table.Body>
       </Table.Root>
+      <Pagination
+        currentPage={page}
+        itemCount={itemCount}
+        pageSize={pageSize}
+      />
     </Box>
   );
 };

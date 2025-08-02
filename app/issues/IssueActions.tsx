@@ -26,6 +26,7 @@ const IssueActions = () => {
           if (searchParams.get("orderBy")) {
             params.append("orderBy", searchParams.get("orderBy")!);
           }
+
           const query = `?${params.toString()}`;
 
           router.push(`/issues${query}`);
