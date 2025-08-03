@@ -20,12 +20,20 @@ const IssueSummary = ({
   return (
     <Flex gap={"2"}>
       {statuses.map((status) => (
-        <Link key={status.label} href={`/issues?status=${status.label}`}>
-          <Card size={"2"}>
-            <Heading size={"2"}>{status.label}</Heading>
-            <Text>{status.value}</Text>
-          </Card>
-        </Link>
+        <Card size={"2"}>
+          <Flex direction="column" gap="1">
+            <Link
+              className="text-sm font-medium"
+              key={status.label}
+              href={`/issues?status=${status.label}`}
+            >
+              {status.label}
+            </Link>
+            <Text size="5" className="font-bold">
+              {status.value}
+            </Text>
+          </Flex>
+        </Card>
       ))}
     </Flex>
   );
