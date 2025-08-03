@@ -1,5 +1,5 @@
-import Pagination from "./components/Pagination";
+import IssueSummary from "./IssueSummary";
 
 export default function Home() {
-  return "Hello";
+  return <IssueSummary open={5} closed={2} inProgress={3} />;
 }
