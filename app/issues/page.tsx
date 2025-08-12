@@ -32,7 +32,7 @@ const Issues = async ({
     ? resolvedSearchParams.status
     : undefined;
   const page = parseInt(resolvedSearchParams.page) || 1;
-  const pageSize = 3;
+  const pageSize = 10;
   const orderBy =
     resolvedSearchParams.orderBy &&
     columns.map((column) => column.value).includes(resolvedSearchParams.orderBy)
@@ -58,7 +58,7 @@ const Issues = async ({
   return (
     <Box>
       <IssueActions />
-      <Table.Root variant="surface">
+      <Table.Root variant="surface" mb="5">
         <Table.Header>
           <Table.Row>
             {columns.map((column) => (
