@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Issue Tracker
 
-## Getting Started
+A full-stack Issue Tracker application built with [Next.js](https://nextjs.org), [Prisma](https://www.prisma.io/), [PostgreSQL](https://www.postgresql.org/), [Radix UI](https://www.radix-ui.com/themes), and [NextAuth.js](https://next-auth.js.org/).  
+This project demonstrates modern web development practices, authentication, database integration, and a clean UI for managing issues.
 
-First, run the development server:
+---
+
+## Features
+
+- **Authentication:** Secure login with NextAuth.js.
+- **CRUD Operations:** Create, view, edit, and delete issues.
+- **Status Tracking:** Track issues by status (Open, In Progress, Closed).
+- **User Assignment:** Assign issues to users.
+- **Responsive UI:** Built with Radix UI and Tailwind CSS.
+- **Charts & Summaries:** Visualize issue statistics.
+- **Markdown Support:** Rich text editing for issue descriptions.
+
+---
+
+## Tech Stack & Packages
+
+- **Framework:** `next` (v15.4.3)
+- **Database ORM:** `@prisma/client`, `prisma`
+- **Database:** PostgreSQL
+- **Authentication:** `next-auth`, `@next-auth/prisma-adapter`
+- **UI:** `@radix-ui/themes`, `@radix-ui/react-icons`, `@tailwindcss/typography`, `@tanstack/react-query`, `react-icons`
+- **Markdown Editor:** `react-markdown`, `react-simplemde-editor`, `easymde`
+- **Charts:** `recharts`
+- **Form Handling:** `react-hook-form`, `zod`, `@hookform/resolvers`
+- **Notifications:** `react-hot-toast`
+- **Skeleton Loading:** `react-loading-skeleton`
+- **Utilities:** `axios`, `classnames`, `delay`
+
+---
+
+## Setup & Commands
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Environment
+
+- Copy `.env.example` to `.env` and set your `DATABASE_URL` for PostgreSQL.
+
+### 3. Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+### 4. Run Database Migrations
+
+```bash
+npx prisma migrate dev --name init
+```
+
+### 5. Start Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 6. Build for Production
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 7. Lint & Format
 
-## Learn More
+```bash
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+├── app/                # Next.js app directory (routes, components, pages)
+├── lib/                # Prisma client setup
+├── prisma/             # Prisma schema and migrations
+├── public/             # Static assets
+├── .env                # Environment variables
+├── package.json        # Project metadata and scripts
+├── README.md           # Project documentation
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## How It Works
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Authentication:** Users sign in via NextAuth.js. Protected routes use middleware.
+- **Issue Management:** Authenticated users can create, edit, and delete issues. Each issue has a status and can be assigned to a user.
+- **UI:** Uses Radix UI for accessible components and Tailwind CSS for styling.
+- **Charts:** Issue statistics are visualized using Recharts.
+- **Markdown:** Issue descriptions support markdown editing and rendering.
+
+---
+
+## Demo
+
+![Issue Tracker Screenshot](public/demo-screenshot.png)
+
+---
+
+## Recruiter Notes
+
+- **Modern stack:** Next.js App Router, Prisma, NextAuth.js, Radix UI.
+- **TypeScript:** Strict typing throughout the codebase.
+- **Best practices:** Authentication, protected routes, modular code, and responsive design.
+- **Showcases:** Full CRUD, real-time UI updates, database integration, and user experience enhancements.
+
+---
+
+## License
+
+MIT
+
+---
+
+## Contact
+
+Feel free to reach out via email: [gowrishankarmukkeri@gmail.com](mailto:gowrishankarmukkeri@gmail.com)
