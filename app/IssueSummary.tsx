@@ -20,7 +20,7 @@ const IssueSummary = ({
   return (
     <Flex gap={"2"}>
       {statuses.map((status) => (
-        <Card size={"2"}>
+        <Card size={"2"} key={status.label}>
           <Flex direction="column" gap="1">
             <Link
               className="text-sm font-medium"
