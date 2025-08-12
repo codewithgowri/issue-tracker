@@ -7,8 +7,8 @@ import { BsPencilSquare } from "react-icons/bs";
 import Markdown from "react-markdown";
 import DeleteButton from "../_components/DeleteButton";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import AssigneeSelect from "../_components/AssigneeSelect";
+import authOptions from "@/app/auth/authOptions";
 
 interface Props {
   params: Promise<{ id: string }>;
